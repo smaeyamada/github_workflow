@@ -32,8 +32,7 @@ jobs:
 
       - name: Check file
         run: |
-          ls -l
-          echo $(md5sum ../scripts/test.py)
+          echo $(md5sum docker/Dockerfile)
 
       # - name: Display the path
       #   run: |
