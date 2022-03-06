@@ -32,7 +32,8 @@ jobs:
 
       - name: Check file
         run: |
-          echo $(md5sum ./.github/scripts/test.py)
+          ls -l
+          echo $(md5sum ../scripts/test.py)
 
       # - name: Display the path
       #   run: |
