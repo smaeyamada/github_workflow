@@ -19,7 +19,7 @@ jobs:
         id: set_refs
         run: |
           refs=${{ github.ref }}
-          if: [ ${{ github.event_name == 'pull_request' }} ]; then
+          if [ ${{ github.event_name == 'pull_request' }} ]; then
             refs=${{ github.head_ref }}
           fi
           echo '::set-output name=refs::$refs'
