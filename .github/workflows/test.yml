@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Check ref
         run: |
-          echo ${{ github.ref }}
-          echo ${{ github.head_ref }}
+          echo "ref = ${{ github.ref }}"
+          echo "head_ref = ${{ github.head_ref }}"
         shell: bash
 
       - name: Set refs
@@ -27,15 +27,19 @@ jobs:
 
       - name: Check out
         uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.set_refs.outpputs.refs }}
+        # with:
+        #   ref: ${{ steps.set_refs.outpputs.refs }}
 
-      - name: Display the path
+      - name: Check file
         run: |
-          import os
-          print(os.environ['PATH'])
-        shell: python
+          echo $(md5sum docker/Dockerfile)
 
-      - name: Docker build
-        run: echo "dummy"
-        shell: bash
+      # - name: Display the path
+      #   run: |
+      #     import os
+      #     print(os.environ['PATH'])
+      #   shell: python
+
+      # - name: Docker build
+      #   run: echo "dummy"
+      #   shell: bash
