@@ -1,0 +1,47 @@
+name: Test
+  on:
+    push:
+    pull_request:
+  jobs:
+    test_ci:
+      runs-on: ubuntu-latest
+      env:
+        REPO: ${{ github.repository }}
+      steps:
+        - name: Check ref
+          run: |
+            echo ${{ github.ref }}
+            echo ${{ github.head_ref }}
+
+        - name: Set refs
+          id: set_refs
+          run: |
+            refs=${{ github.ref }}
+            if: ${{ github.event_name == 'pull_request' }}; then
+              refs=${{ github.head_ref }}
+            echo '::set-output name=refs::$refs'
+          shell: bash
+
+        - uses: actions/checkout@v2
+          with:
+            ref: ${{ steps.set_refs.outpputs.refs }}
+        
+        # - run: date >> README.md
+        
+        # - name: commit manifests and push
+        #   run: |
+        #     git config --global user.email "workflow@example.com"
+        #     git config --global user.name "workflow user"
+        #     git add .
+        #     git commit -m 'modify README' && git push ${REPO} HEAD:${{github.event.pull_request.head.ref}} || true
+        
+        # - name: merge pull request
+        #   uses: actions/github-script@0.4.0
+        #   with:
+        #     github-token: ${{secrets.GITHUB_TOKEN}}
+        #     script: |
+        #       github.pulls.merge({
+        #         owner: context.repo.owner,
+        #         repo: context.repo.repo,
+        #         pull_number: context.payload.pull_request.number
+        #       })
