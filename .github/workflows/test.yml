@@ -27,8 +27,8 @@ jobs:
 
       - name: Check out
         uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.set_refs.outpputs.refs }}
+        # with:
+        #   ref: ${{ steps.set_refs.outpputs.refs }}
 
       - name: Check file
         run: |
