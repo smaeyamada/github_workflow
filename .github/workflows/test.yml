@@ -44,7 +44,7 @@ jobs:
 
       - name: Get env
         run: |
-          echo ${ env.NEW_KEY }
+          echo "check env: $NEW_KEY"
         shell: bash
 
       # - name: Docker build
