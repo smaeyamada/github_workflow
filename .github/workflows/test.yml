@@ -34,11 +34,18 @@ jobs:
         run: |
           echo $(md5sum docker/Dockerfile)
 
-      # - name: Display the path
-      #   run: |
-      #     import os
-      #     print(os.environ['PATH'])
-      #   shell: python
+      - name: Python test
+        run: |
+          import os
+          print(os.getenv('LANG'))
+          print(os.getenv('NEW_KEY'))
+          os.environ['NEW_KEY'] = 'test env'
+        shell: python
+
+      - name: Get env
+        run: |
+          echo ${ env.NEW_KEY }
+        shell: bash
 
       # - name: Docker build
       #   run: echo "dummy"
