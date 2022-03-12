@@ -39,12 +39,16 @@ jobs:
           import os
           print(os.getenv('LANG'))
           print(os.getenv('NEW_KEY'))
-          os.environ['NEW_KEY'] = 'test env'
+          with open('env_file.txt', mode='w') as f:
+            f.write('NEW_KEY "test env"')
+          with open('env_file.txt') as f:
+            print('read', f.read())
         shell: python
 
       - name: Get env
         run: |
           echo "check env: $NEW_KEY"
+          cat env_file.txt
         shell: bash
 
       # - name: Docker build
