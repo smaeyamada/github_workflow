@@ -13,7 +13,7 @@ jobs:
         run: |
           echo "ref = ${{ github.ref }}"
           echo "head_ref = ${{ github.head_ref }}"
-          echo "${{ github.ref#refs/heads/ }}"
+          echo "${GITHUB_REF#refs/heads/}"
         shell: bash
 
       - name: Set refs
