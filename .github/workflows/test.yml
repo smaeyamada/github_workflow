@@ -89,3 +89,10 @@ jobs:
           print('id:', wf_run['id'])
           print('suite_id:', wf_run['check_suite_id'])
         shell: python
+
+      - name: Check artifacts
+        run: |
+          wfaf=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ github.token }}" \
+          https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)
+          echo $wfaf
+        shell: bash
