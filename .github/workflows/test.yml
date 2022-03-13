@@ -63,20 +63,28 @@ jobs:
     env:
       REPO: ${{ github.repository }}
     steps:
-      - name: Download artifacts test
-        uses: actions/download-artifact@v2
-        with:
-          name: test_artifact_${{ github.run_id }}
+      # - name: Download artifacts test
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: test_artifact_${{ github.run_id }}
 
-      - name: Check file
-        run: |
-          ls -l
-          cat env_file.txt
-        shell: bash
+      # - name: Check file
+      #   run: |
+      #     ls -l
+      #     cat env_file.txt
+      #   shell: bash
 
       - name: Check info
         run: |
-          wfs=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ github.token }}" \
-          https://api.github.com/repos/${{ github.repository }}/actions/runs?per_page=2)
-          echo $wfs
+          wf=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ github.token }}" \
+          https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          echo $wf > buf.txt
         shell: bash
+
+      - name: Get param
+        run: |
+          with open('buf.txt', mode='r') as f:
+            wf_run = f.read().json()
+          print('id:', wf_run['id'])
+          print('suite_id:', wf_run['check_suite_id'])
+        shell: python
