@@ -13,6 +13,7 @@ jobs:
         run: |
           echo "ref = ${{ github.ref }}"
           echo "head_ref = ${{ github.head_ref }}"
+          echo "${{ github.ref#refs/heads/ }}"
         shell: bash
 
       - name: Set refs
@@ -65,5 +66,13 @@ jobs:
 
       - name: Check file
         run: |
-          ls -l *.zip
+          ls -l test_artifact*
+          zcat test_artifact_${{ github.run_id }}
+        shell: bash
+
+      - name: Check info
+        run: |
+          wfs=curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ github.token }}" \
+          https://api.github.com/repos/${{ github.repository }}/actions/runs?per_page=2
+          echo $wfs
         shell: bash
