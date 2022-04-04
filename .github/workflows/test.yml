@@ -29,6 +29,6 @@ jobs:
 
       - name: Code style check
         run: |
-          pre-commit run --all; echo "aaaaa"
+          pre-commit run --all | echo "stat:$?"
           echo $?
           echo "bbbb"
