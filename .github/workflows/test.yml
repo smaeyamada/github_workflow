@@ -24,7 +24,7 @@ jobs:
       - name: Inst pre-commit
         run: |
           pip3 install pre-commit
-          pre-commit --version
+          pre-commit sample-config > .pre-commit-config.yaml
         shell: bash
 
       - name: Code style check
