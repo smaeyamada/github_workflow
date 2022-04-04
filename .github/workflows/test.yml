@@ -27,8 +27,16 @@ jobs:
           pre-commit sample-config > .pre-commit-config.yaml
         shell: bash
 
+#       - name: Code style check
+#         run: |
+#           pre-commit run --all | grep 'fail' || echo "stat:$?"
+#           echo $?
+#           echo "bbbb"
+
       - name: Code style check
         run: |
-          pre-commit run --all | grep 'fail' || echo "stat:$?"
-          echo $?
-          echo "bbbb"
+          pre-commit run --all || stat=$?
+          echo $stat
+          if [ $stat -ne 0 ]; then
+            echo 'cache error'
+          fi
