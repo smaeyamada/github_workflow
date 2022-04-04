@@ -30,3 +30,4 @@ jobs:
       - name: Code style check
         run: |
           pre-commit run --all
+          echo $?
