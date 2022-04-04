@@ -29,5 +29,5 @@ jobs:
 
       - name: Code style check
         run: |
-          pre-commit run --all
+          pre-commit run --all | grep failed | echo "aaaaa"
           echo $?
