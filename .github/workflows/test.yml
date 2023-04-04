@@ -1,20 +1,11 @@
 name: Test
 on:
-  push:
   pull_request:
     branches: ['main']
 jobs:
   test_ci:
     runs-on: ubuntu-latest
-    env:
-      REPO: ${{ github.repository }}
     steps:
-      - name: Check ref
-        run: |
-          echo "ref = ${{ github.ref }}"
-          echo "head_ref = ${{ github.head_ref }}"
-        shell: bash
-
       - name: Set refs
         id: set_refs
         run: |
@@ -26,20 +17,30 @@ jobs:
         shell: bash
 
       - name: Check out
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         # with:
         #   ref: ${{ steps.set_refs.outpputs.refs }}
 
-      - name: Check file
+      - name: Create files
         run: |
-          echo $(md5sum docker/Dockerfile)
+          mkdir -p "src/sub1" "src/sub2" "src/sub3/sub31"
+          echo "file" > src/sub1/test.log
+          echo "file" > src/sub2/test.log
+          echo "file" > src/sub3/sub33/test.log
+          find "src/"
 
-      # - name: Display the path
-      #   run: |
-      #     import os
-      #     print(os.environ['PATH'])
-      #   shell: python
+      - name: Move files
+        run: |
+          mkdir dest
+          while read -r test_log; do
+            echo ${test_log}
+            p_dir=$(dirname ${test_log})
+            mkdir -p "dest/${p_dir}"
+            mv "${test_log}" "dest/${p_dir}/test_log.txt"
+          done < <(find "src/" -name "test.log")
+          ls -F
+          find "dest/"
 
-      # - name: Docker build
-      #   run: echo "dummy"
-      #   shell: bash
+#       - name: Check file
+#         run: |
+#           echo $(md5sum docker/Dockerfile)
