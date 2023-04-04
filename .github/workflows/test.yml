@@ -24,9 +24,9 @@ jobs:
       - name: Create files
         run: |
           mkdir -p "src/sub1" "src/sub2" "src/sub3/sub31"
-          echo "file" > src/sub1/test.log
-          echo "file" > src/sub2/test.log
-          echo "file" > src/sub3/sub33/test.log
+          echo "file" > "src/sub1/test.log"
+          echo "file" > "src/sub2/test.log"
+          echo "file" > "src/sub3/sub31/test.log"
           find "src/"
 
       - name: Move files
