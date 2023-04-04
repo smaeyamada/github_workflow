@@ -35,14 +35,18 @@ jobs:
           cp -r src src_bk
           echo "[find src_bk]"
           find "src_bk/"
-          while read -r test_log; do
-            p_dir=$(dirname ${test_log})
-            mkdir -p "dest/${p_dir}"
-            mv "${test_log}" "dest/${p_dir}/test_log.txt"
-          done < <(find "src/" -name "test.log")
-          ls -l
-          rm -rf "dest/src" "src"
-          cp -r src_bk src
+          for i in $(seq 3); then
+            echo "[$i]"
+            while read -r test_log; do
+              p_dir=$(dirname ${test_log})
+              mkdir -p "dest/${p_dir}"
+              mv "${test_log}" "dest/${p_dir}/test_log.txt"
+            done < <(find "src/" -name "test.log")
+            echo "[dest files num] $(find "dest/" -name "test.log" | wc -l)"
+            rm -rf "dest/src" "src"
+            cp -r src_bk src
+            echo "[src files num] $(find "src/" -name "test.log" | wc -l)"
+          done
           
           echo "[find dest]"
           find "dest/"
