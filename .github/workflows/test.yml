@@ -35,7 +35,7 @@ jobs:
           cp -r src src_bk
           echo "[find src_bk]"
           find "src_bk/"
-          for i in $(seq 3); then
+          for i in $(seq 3); do
             echo "[$i]"
             while read -r test_log; do
               p_dir=$(dirname ${test_log})
