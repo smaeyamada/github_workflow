@@ -27,19 +27,27 @@ jobs:
           echo "file" > "src/sub1/test.log"
           echo "file" > "src/sub2/test.log"
           echo "file" > "src/sub3/sub31/test.log"
-          find "src/"
+          find "src/" -type f
 
       - name: Move files
         run: |
           mkdir dest
+          cp -r src src_bk
+          echo "[find src_bk]"
+          find "src_bk/"
           while read -r test_log; do
-            echo ${test_log}
             p_dir=$(dirname ${test_log})
             mkdir -p "dest/${p_dir}"
             mv "${test_log}" "dest/${p_dir}/test_log.txt"
           done < <(find "src/" -name "test.log")
-          ls -F
+          ls -l
+          rm -rf "dest/src" "src"
+          cp -r src_bk src
+          
+          echo "[find dest]"
           find "dest/"
+          echo "[find src]"
+          find "src/"
 
 #       - name: Check file
 #         run: |
