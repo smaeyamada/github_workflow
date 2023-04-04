@@ -42,7 +42,7 @@ jobs:
               mkdir -p "dest/${p_dir}"
               mv "${test_log}" "dest/${p_dir}/test_log.txt"
             done < <(find "src/" -name "test.log")
-            echo "[dest files num] $(find "dest/" -name "test.log" | wc -l)"
+            echo "[dest files num] $(find "dest/" -name "test_log.txt" | wc -l)"
             rm -rf "dest/src" "src"
             cp -r src_bk src
             echo "[src files num] $(find "src/" -name "test.log" | wc -l)"
