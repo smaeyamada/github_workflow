@@ -77,7 +77,7 @@ jobs:
             while read -r test_log; do
               p_dir=$(dirname ${test_log})
               mkdir -p "dest/${p_dir}"
-              rm src_ent/5/test.log    # [debug] remove !!!!!!!!!!!!!!!!!!
+              rm "src_ent${test_log#src}"    # [debug] remove !!!!!!!!!!!!!!!!!!
               mv "${test_log}" "dest/${p_dir}/test_log.txt"
             done < <(find "src/" -name "test.log")
 
