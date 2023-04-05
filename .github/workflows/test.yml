@@ -53,6 +53,42 @@ jobs:
           echo "[find src]"
           find "src/"
 
+      - name: Move files loop
+        run: |
+          # make files
+          for i in $(seq 10); do
+            mkdir -p src_org/$i
+            echo "file" > "src_org/$i/test.log"
+          done
+          find "src_org/" -type f
+          
+          # process
+          mkdir dest
+          for i in $(seq 3); do
+            echo "[$i]"
+            cp -r src_org/ src_ent/
+            ln -s src_ent src
+            
+            echo "[src files num] $(find "src/" -name "test.log" | wc -l)"
+            echo "::group::[$i] src/ files"
+            find "src/" -name "test.log" -type f
+            echo "::endgroup::"
+
+            while read -r test_log; do
+              p_dir=$(dirname ${test_log})
+              mkdir -p "dest/${p_dir}"
+              mv "${test_log}" "dest/${p_dir}/test_log.txt"
+            done < <(find "src/" -name "test.log")
+
+            echo "[dest files num] $(find "dest/" -name "test_log.txt" | wc -l)"
+            echo "::group::[$i] dest/ files"
+            find "dest/" -type f
+            echo "::endgroup::"
+            unlink src
+            rm -rf "dest/src" "src_ent"
+          done
+          
+
 #       - name: Check file
 #         run: |
 #           echo $(md5sum docker/Dockerfile)
