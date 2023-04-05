@@ -71,6 +71,7 @@ jobs:
             
             echo "[src files num] $(find "src/" -name "test.log" | wc -l)"
             echo "::group::[$i] src/ files"
+            ls -l
             find "src/" -name "test.log" -type f
             echo "::endgroup::"
 
