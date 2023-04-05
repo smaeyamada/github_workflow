@@ -1,20 +1,11 @@
 name: Test
 on:
-  push:
   pull_request:
     branches: ['main']
 jobs:
   test_ci:
     runs-on: ubuntu-latest
-    env:
-      REPO: ${{ github.repository }}
     steps:
-      - name: Check ref
-        run: |
-          echo "ref = ${{ github.ref }}"
-          echo "head_ref = ${{ github.head_ref }}"
-        shell: bash
-
       - name: Set refs
         id: set_refs
         run: |
@@ -26,20 +17,79 @@ jobs:
         shell: bash
 
       - name: Check out
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         # with:
         #   ref: ${{ steps.set_refs.outpputs.refs }}
 
-      - name: Check file
+#       - name: Create files
+#         run: |
+#           mkdir -p "src/sub1" "src/sub2" "src/sub3/sub31"
+#           echo "file" > "src/sub1/test.log"
+#           echo "file" > "src/sub2/test.log"
+#           echo "file" > "src/sub3/sub31/test.log"
+#           find "src/" -type f
+
+#       - name: Move files
+#         run: |
+#           mkdir dest
+#           cp -r src src_bk
+#           echo "[find src_bk]"
+#           find "src_bk/"
+#           for i in $(seq 3); do
+#             echo "[$i]"
+#             while read -r test_log; do
+#               p_dir=$(dirname ${test_log})
+#               mkdir -p "dest/${p_dir}"
+#               mv "${test_log}" "dest/${p_dir}/test_log.txt"
+#             done < <(find "src/" -name "test.log")
+#             echo "[dest files num] $(find "dest/" -name "test_log.txt" | wc -l)"
+#             rm -rf "dest/src" "src"
+#             cp -r src_bk src
+#             echo "[src files num] $(find "src/" -name "test.log" | wc -l)"
+#           done
+          
+#           echo "[find dest]"
+#           find "dest/"
+#           echo "[find src]"
+#           find "src/"
+
+      - name: Move files loop
         run: |
-          echo $(md5sum docker/Dockerfile)
+          # process
+          mkdir dest
+          for i in $(seq 1000); do
+            # make files
+            for i in $(seq 300); do
+              mkdir -p src_org/$i
+              echo "file" > "src_org/$i/test.log"
+            done
+            # find "src_org/" -type f
 
-      # - name: Display the path
-      #   run: |
-      #     import os
-      #     print(os.environ['PATH'])
-      #   shell: python
+            cp -r src_org/ src_ent/
+            ln -s src_ent src
+            
+            # echo "[src files num] $(find "src/" -name "test.log" | wc -l)"
+            # echo "::group::[$i] src/ files"
+            # ls -l
+            # find "src/" -name "test.log" -type f
+            # echo "::endgroup::"
 
-      # - name: Docker build
-      #   run: echo "dummy"
-      #   shell: bash
+            while read -r test_log; do
+              p_dir=$(dirname ${test_log})
+              mkdir -p "dest/${p_dir}"
+              rm "src_ent${test_log#src}"    # [debug] remove !!!!!!!!!!!!!!!!!!
+              mv "${test_log}" "dest/${p_dir}/test_log.txt"
+            done < <(find "src/" -name "test.log")
+
+            # echo "[dest files num] $(find "dest/" -name "test_log.txt" | wc -l)"
+            # echo "::group::[$i] dest/ files"
+            # find "dest/" -type f
+            # echo "::endgroup::"
+            unlink src
+            rm -rf "dest/src" "src_ent" "src_org"
+          done
+          
+
+#       - name: Check file
+#         run: |
+#           echo $(md5sum docker/Dockerfile)
