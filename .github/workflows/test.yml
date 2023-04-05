@@ -21,37 +21,37 @@ jobs:
         # with:
         #   ref: ${{ steps.set_refs.outpputs.refs }}
 
-      - name: Create files
-        run: |
-          mkdir -p "src/sub1" "src/sub2" "src/sub3/sub31"
-          echo "file" > "src/sub1/test.log"
-          echo "file" > "src/sub2/test.log"
-          echo "file" > "src/sub3/sub31/test.log"
-          find "src/" -type f
+#       - name: Create files
+#         run: |
+#           mkdir -p "src/sub1" "src/sub2" "src/sub3/sub31"
+#           echo "file" > "src/sub1/test.log"
+#           echo "file" > "src/sub2/test.log"
+#           echo "file" > "src/sub3/sub31/test.log"
+#           find "src/" -type f
 
-      - name: Move files
-        run: |
-          mkdir dest
-          cp -r src src_bk
-          echo "[find src_bk]"
-          find "src_bk/"
-          for i in $(seq 3); do
-            echo "[$i]"
-            while read -r test_log; do
-              p_dir=$(dirname ${test_log})
-              mkdir -p "dest/${p_dir}"
-              mv "${test_log}" "dest/${p_dir}/test_log.txt"
-            done < <(find "src/" -name "test.log")
-            echo "[dest files num] $(find "dest/" -name "test_log.txt" | wc -l)"
-            rm -rf "dest/src" "src"
-            cp -r src_bk src
-            echo "[src files num] $(find "src/" -name "test.log" | wc -l)"
-          done
+#       - name: Move files
+#         run: |
+#           mkdir dest
+#           cp -r src src_bk
+#           echo "[find src_bk]"
+#           find "src_bk/"
+#           for i in $(seq 3); do
+#             echo "[$i]"
+#             while read -r test_log; do
+#               p_dir=$(dirname ${test_log})
+#               mkdir -p "dest/${p_dir}"
+#               mv "${test_log}" "dest/${p_dir}/test_log.txt"
+#             done < <(find "src/" -name "test.log")
+#             echo "[dest files num] $(find "dest/" -name "test_log.txt" | wc -l)"
+#             rm -rf "dest/src" "src"
+#             cp -r src_bk src
+#             echo "[src files num] $(find "src/" -name "test.log" | wc -l)"
+#           done
           
-          echo "[find dest]"
-          find "dest/"
-          echo "[find src]"
-          find "src/"
+#           echo "[find dest]"
+#           find "dest/"
+#           echo "[find src]"
+#           find "src/"
 
       - name: Move files loop
         run: |
